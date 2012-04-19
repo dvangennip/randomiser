@@ -8,7 +8,7 @@ This is why I made this simple webform to help out.
 Using the form on the included webpage you can generate a randomised order for the conditions specified and save this to a file.
 Because the code first adds conditions in equal numbers and then shuffles the order.
 
-#Limitations
+####Limitations
 The code does not counterbalance conditions such that condition A would be followed up by condition B as often as it is followed by C.
 For small samples and a condition order susceptible to any spillover effects from previous conditions it may be useful to check the results.
 Usually this only applies to within group order. For larger samples the random order will cancel out such anomalies.
