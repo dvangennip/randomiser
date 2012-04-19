@@ -1,0 +1,344 @@
+/* =Reset default browser CSS. Based on work by Eric Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
+-------------------------------------------------------------- */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	background: transparent;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	vertical-align: baseline;
+}
+body {
+	line-height: 1;
+}
+h1, h2, h3, h4, h5, h6 {
+	clear: both;
+	font-weight: normal;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote {
+	quotes: none;
+}
+blockquote:before, blockquote:after {
+	content: '';
+	content: none;
+}
+del {
+	text-decoration: line-through;
+}
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+a img {
+	border: none;
+}
+
+/* Common elements */
+
+body {
+	background: #fff5eb;
+	color: #404040;
+	font-family: "Georgia", serif;
+	line-height: 1.4;
+}
+
+.centered-content {
+	margin: 0 auto;
+	max-width: 800px;
+}
+
+/* Text styles */
+
+h1, h2, h3, h4, h5, h6 {
+	color: #202020;
+    font-family: "Driod Sans",verdana,helvetica,sans-serif;
+}
+
+h1, h2 {
+	font-family: "Droid Serif", "Georgia", serif;
+    font-size: 1.7em;
+    line-height: 1.3;
+}
+
+h2 {
+	font-size: 1.3em;
+}
+
+h3 {
+	font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+h4 {
+    /*font-size: 1.1em;*/
+    margin: 30px 0 10px;
+}
+
+a,
+a:link,
+a:visited {
+    color: #CC0000;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+h1 > a,
+h1 > a:link,
+h1 > a:visited,
+h4 > a,
+h4 > a:link,
+h4 > a:visited {
+	color: #202020;
+}
+
+/* Input */
+
+fieldset {
+	border: 1px solid #DDDDDD;
+    border-radius: 5px 5px 5px 5px;
+    margin: 20px 0;
+    padding: 10px;
+}
+
+legend, label {
+	display: block;
+	font-family: "Driod Sans",verdana,helvetica,sans-serif;
+}
+legend {
+	padding: 0 5px;
+}
+label {
+	font-size: 0.9em;
+	margin: 15px 0 5px;
+}
+label.inline-right {
+	display: inline-block;
+	margin-left: 5px;
+	vertical-align: sub;
+}
+
+select {
+	font-size: 1em;
+	padding: 3px 9px 3px 0;
+}
+
+input[type=text],
+input[type=number],
+input[type=password],
+textarea {
+	background-color: #fff;
+	border: 1px solid #ccf;
+	border-radius: 3px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) inset;
+	font-family: "Lucida Grande", verdana, helvetica, arial, sans-serif;
+	font-size: 1.1em;
+	padding: 7px;
+}
+
+input[type=text]:hover,
+input[type=text]:focus,
+input[type=number]:hover,
+input[type=number]:focus,
+input[type=password]:hover,
+input[type=password]:focus,
+textarea:hover,
+textarea:focus {
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) inset;
+}
+
+input[type=text],
+input[type=number],
+input[type=password], {
+	display: inline-block;
+    min-width: 300px;
+}
+
+textarea {
+	display: block;
+	min-height: 80px;
+	margin: 0 0 10px 0;
+	width: 100%;
+}
+
+input[type=submit],
+button {
+	background-color: #F5F5F5;
+	background-image: -moz-linear-gradient(#F5F5F5, #d5d5d5);
+	background-image: -webkit-linear-gradient(#F5F5F5, #d5d5d5);
+	background-image: -ms-linear-gradient(#F5F5F5, #d5d5d5);
+	background-image: -o-linear-gradient(#F5F5F5, #d5d5d5);
+	background-image: linear-gradient(#F5F5F5, #d5d5d5);
+    border: 1px solid #777;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+	color: #404040;
+	font-weight: bold;
+    min-height: 20px;
+    min-width: 90px;
+    padding: 8px 15px;
+	text-shadow: 0 1px rgba(255, 255, 255, 0.9);
+}
+
+input[type=submit]:hover,
+input[type=submit]:focus,
+button:hover,
+button:focus {
+	background-color: #ddd;
+	background-image: -moz-linear-gradient(#e9e9e9, #c5c5c5);
+	background-image: -webkit-linear-gradient(#e9e9e9, #c5c5c5);
+	background-image: -ms-linear-gradient(#e9e9e9, #c5c5c5);
+	background-image: -o-linear-gradient(#e9e9e9, #c5c5c5);
+	background-image: linear-gradient(#e9e9e9, #c5c5c5);
+}
+
+input[type=submit]:active,
+button:active {
+	background-color: #aae;
+	background-image: -moz-linear-gradient(#dadada, #aab);
+	background-image: -webkit-linear-gradient(#dadada, #aab);
+	background-image: -ms-linear-gradient(#dadada, #aab);
+	background-image: -o-linear-gradient(#dadada, #aab);
+	background-image: linear-gradient(#dadada, #aab);
+}
+
+button.stand-alone {
+	display: block;
+	margin: 15px 0 0;
+}
+
+button.group-delete {
+	margin: 0 0 0 10px;
+}
+
+input.submit {
+	font-size: 0.8rem;
+}
+
+input.inputSmall {
+	width: 150px;
+}
+
+/* Content */
+
+#content {
+	padding: 20px;
+}
+
+#content > h1 {
+	color: #CCC2B9;
+	font-size: 2em;
+	margin: 0 15px;
+}
+#content > h5 {
+	color: #6F6969;
+	margin: 0 15px;
+}
+
+/* Groups */
+
+.group-wrapper {
+    background-color: #eef;
+    border-radius: 3px;
+	margin-bottom: 10px;
+    padding: 5px 7px;
+}
+.group-wrapper:last-of-type {
+	margin-bottom: 0;
+}
+
+.group-wrapper label {
+	font-size: 0.8em;
+	margin-top: 0;
+}
+
+.group-wrapper input[type=text],
+.group-wrapper input[type=number] {
+	min-width: 50%;
+}
+
+/* Item styles */
+
+.item {
+	background: #fff;
+}
+
+.item-content {
+    padding: 15px 20px 20px;
+}
+
+.item-content > h1 {
+	
+}
+
+.item-content > h5 {
+	color: #666;
+	margin-top: 10px; /*-21px;*/
+	text-align: right;
+}
+
+.item-body > h3 {
+	font-size: 1.1em;
+	font-weight: normal;
+	margin: 30px 0 -5px 0;
+	text-transform: none;
+}
+
+.item-body > p {
+	font-size: 1.05em;
+	margin-top: 20px;
+}
+
+.item-body > ul {
+    line-height: 1.7;
+    list-style: square outside none;
+    margin: 20px 0 0 20px;
+}
+
+.item-body > ul > li {
+	font-size: 0.9em;
+}
+
+p.form-error {
+	background-color: #f66;
+	border-radius: 4px 4px 4px 4px;
+    color: #fff;
+    display: none;
+    font-family: "Driod Sans",verdana,helvetica,sans-serif;
+    margin: 5px 0;
+    padding: 3px 5px;
+	text-shadow: 0 1px rgba(30, 30, 30, 0.3);
+}
+
+/* Output table */
+
+table {
+	background: #fff;
+	text-align: center;
+}
+
+table th,
+table td {
+	padding: 0 10px;
+}
+
+table tr {
+	padding: 3px 0;
+}
+table tr:nth-of-type(2n) {
+	background: #eef;
+}

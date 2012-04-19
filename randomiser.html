@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Condition randomiser</title>
+	<link rel="stylesheet" media="all" href="randomiser.css" type="text/css">
+	<script type="text/javascript" src="randomiser.js"></script>
+</head>
+<body>
+	<div id="content" class="centered-content">
+		<div class="item">
+			<div class="item-content">
+				<h1>Random condition generator</h1>
+				<h5>Version 4, 2012-04-13</h5>
+				<div class="item-body">
+					<p>
+						In all kinds of research it is necessary to counterbalance or randomise expertimental conditions to avoid biases.
+						Using the form below you can generate a randomised order for the conditions specified and save this to a file.</p>
+					<h3>Usage</h3>
+					<p>
+						Fill out the form below with your within group conditions and add groups for between group designs.
+						Also adjust the number of participants (per session) and press Randomise.
+						You can opt to save to a file.
+					</p>
+					<h3>Notes</h3>
+					<ul>
+						<li>
+							This tool adds all sessions in equal amounts to achieve a balanced spread between groups (and then shuffles the order).
+							For small or hard to divide numbers of participant groups (number of sessions / number of condition groups) this may not be perfect.
+							Check afterwards to make sure the results are to your liking.
+						</li>
+					</ul>
+					<h3>Enter your experimental conditions here</h3>
+					<form id="random-form" action="output.php" method="post">
+						<input type="hidden" id="t" name="t" value="">
+						<input type="hidden" id="n" name="n" value="">
+						<input type="hidden" id="f" name="f" value="">
+						<fieldset>
+							<legend>Participant sessions</legend>
+							<label for="participants-count">Number of participants in total</label>
+							<input type="number" id="participants-count" name="participants-count" class="inputSmall" value="100" min="1">
+							<label for="participants-together">Number of participants together at the same time</label>
+							<input type="number" id="participants-together" name="participants-together" class="inputSmall" value="1" min="1">
+						</fieldset>
+						<fieldset id="groups">
+							<legend>Conditions per session</legend>
+							<!-- groups are added here -->
+							<button id="groups-add-button" class="stand-alone">+ Add a group</button>
+						</fieldset>
+						<fieldset>
+							<legend>Export to file (else generates table below)</legend>
+							<input type="checkbox" id="tofile" name="tofile">
+							<label for="tofile" class="inline-right">Yes, give me a file</label>
+							<label for="output-selector">Type of output file that will be generated</label>
+							<select id="output-selector" name="output-selector" size="1">
+								<option value="0" selected>HTML table</option>
+								<option value="1">CSV (opens in a.o. Excel, OpenOffice, Numbers, and SPSS)</option>
+								<option value="2">JSON (readable with Javascript and other code: see json.org)</option>
+							</select>
+							<label for="output-separator">Data separator to use in output (may ease import)</label>
+							<select id="output-separator" name="output-separator" size="1">
+								<option value=";" selected>; (European style)</option>
+								<option value=",">, (US style, use for Excel)</option>
+							</select>
+						</fieldset>
+						
+						<input type="submit" id="form_submit_button" class="submit" value="Randomise">
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+	<div id="output"></div>
+</body>
+</html>
