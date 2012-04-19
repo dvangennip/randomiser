@@ -342,3 +342,21 @@ table tr {
 table tr:nth-of-type(2n) {
 	background: #eef;
 }
+
+/* GitHub ribbon styling */
+
+.github-ribbon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0.3;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-ms-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
+}
+
+.github-ribbon:hover {
+	opacity: 1;
+}
