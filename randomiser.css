@@ -218,7 +218,7 @@ button:active {
 
 input[type=submit][disabled],
 button[disabled] {
-	opacity: 0.7;
+	opacity: 0.6;
 }
 
 button.stand-alone {

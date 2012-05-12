@@ -141,7 +141,7 @@ window.addEventListener('DOMContentLoaded', function () {
 var Randomiser = function () {
 	// init variables
 	this.outputToFile = false;
-	this.outputType = 0;
+	this.outputType = 1;
 	this.groups = [];
 
 	// setup edit form
