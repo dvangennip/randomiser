@@ -216,6 +216,11 @@ button:active {
 	background-image: linear-gradient(#dadada, #aab);
 }
 
+input[type=submit][disabled],
+button[disabled] {
+	opacity: 0.7;
+}
+
 button.stand-alone {
 	display: block;
 	margin: 15px 0 0;

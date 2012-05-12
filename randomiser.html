@@ -8,13 +8,13 @@
 </head>
 <body>
 	<a class="github-ribbon" href="https://github.com/dvangennip/randomiser">
-		<img src="https://a248.e.akamai.net/assets.github.com/img/6429057dfef9e98189338d22e7f6646c6694f032/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub">
+		<img src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub">
 	</a>
 	<div id="content" class="centered-content">
 		<div class="item">
 			<div class="item-content">
 				<h1>Random condition generator</h1>
-				<h5>Version 4, 2012-04-13</h5>
+				<h5>Version 5, 2012-05-12</h5>
 				<div class="item-body">
 					<p>
 						In all kinds of research it is necessary to counterbalance or randomise expertimental conditions to avoid biases.
@@ -31,6 +31,12 @@
 							This tool adds all sessions in equal amounts to achieve a balanced spread between groups (and then shuffles the order).
 							For small or hard to divide numbers of participant groups (number of sessions / number of condition groups) this may not be perfect.
 							Check afterwards to make sure the results are to your liking.
+						</li>
+						<li>
+							The shuffling is not perfectly random, there is a post-shuffle adjustment to make sure conditions are not succeeded by the same condition an unlikely amount of times.
+						</li>
+						<li>
+							No counterbalancing is achieved, which means the output is not generated such that a within-group condition is followed an equal amount of times by each of the other conditions across all sessions.
 						</li>
 					</ul>
 					<h3>Enter your experimental conditions here</h3>

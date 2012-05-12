@@ -10,9 +10,9 @@ var rf;
  * Events can be added by including an 'events' object.
  *
  * Example:
- * var button = Element.create('button', {'id': 'fancy_button', 'class': 'fancy', 'events': {'click': handlerFn}}); 
+ * var button = Element.make('button', {'id': 'fancy_button', 'class': 'fancy', 'events': {'click': handlerFn}}); 
  */
-Element.create = function (_nodeType, _attributes) { // my own concoction
+Element.make = function (_nodeType, _attributes) { // my own concoction
 	var nodeType = (_nodeType !== undefined && typeof _nodeType === 'string') ? _nodeType : 'div',
 		attr = (_attributes !== undefined && typeof _attributes === 'object') ? _attributes : {},
 		el = document.createElement(nodeType),
@@ -29,6 +29,8 @@ Element.create = function (_nodeType, _attributes) { // my own concoction
 };
 
 /**
+ * Function shuffles the order of elements randomly, something
+ * which a bubble-sort algorithm (used by Array.prototype.sort) cannot accomplish.
  * Implements http://en.wikipedia.org/wiki/Fisher-Yates_shuffle
  *
  * It works on an array itself, but returns this instance as well.
@@ -45,6 +47,72 @@ Array.prototype.shuffle = function () {
         this[topItem] = tmp;
     }
     return this; // helps chaining
+};
+
+/**
+ * Function goes over each item in the array and checks whether the successive
+ * occurence of items is below chance level. If so, the item that triggered the
+ * cutoff is moved to the end of the array. This prevents items in the array from
+ * occuring an unlikely or unpreferred amount of times in succession.
+ *
+ * Use this after Array.prototype.shuffle or other major changes.
+ *
+ * Example:
+ * Four different items, so each has a chance of occuring at the next time of 1/4.
+ * The change of occuring twice is (1/4)^2 = 1/16 = .0625, thrice (1/4)^3 = 1/64 = .0156.
+ * If the cutoff is set at 0.05 this third item will be relegated to the back of the array (as .0156 < 0.05).
+ *
+ * Note: this function assumes comparable items, such that one item could be tested for equality with the next one.
+ *       Arrays and other non-primitive data types cause trouble.
+ *
+ * @param {Number} inCutoff (Optional) A number between 0 and 1 that gives the cutoff change (default 0.05)
+ */
+Array.prototype.balanceOrder = function (inCutoff) {
+	var h = 0,
+		occurences = 0,
+		previousItem,
+		cutoffChance = (!isNaN(inCutoff) && inCutoff > 0 && inCutoff < 1) ? inCutoff : 0.05,
+		kindOfGroups = [];
+		chanceForGroup = 0; // what is the chance a succession happens?
+		
+	// find out how many different items there are
+	this.forEach(function (item, index) {
+		var notFoundYet = kindOfGroups.every(function (listItem, listIndex) {
+			if (listItem === item) // found
+				return false;
+			return true; // continue search
+		});
+		if (notFoundYet) // add to list
+			kindOfGroups.push(item);
+	});
+	chanceForGroup = 1 / kindOfGroups.length;
+		
+	// loop over all items
+	// Because an item may be moved to the end with the next item taking up the index of the
+	// now moved item the forEach or regular for loop cannot be used.
+	// Stop one before the last element, otherwise it can get stuck if the last is similar
+	// to the one before, resulting in moving it to the back and do so over and over and over.
+	while (h < this.length-1) {
+		if (this[h] === previousItem)
+			occurences++;
+		else
+			occurences = 1;
+		// check if the succession is still within reasonable chance level
+		if (occurences > 1) {
+			var successionChance = Math.pow(chanceForGroup, occurences);
+			if (successionChance < cutoffChance) {
+				// move this element to end of output
+				var thisItem = this.splice(h, 1); // returns array with one element
+				this.push(thisItem[0]);
+				// skip updating previousItem and h
+				continue;
+			}
+		}
+		// update reference for next turn
+		previousItem = this[h];
+		h++;
+	}
+	return this; // helps chaining
 };
 
 /**
@@ -165,6 +233,7 @@ Randomiser.prototype = {
 		}
 		// init group
 		this.groups.push(new GroupController(newGroupNumber, this));
+		this.groupsChanged();
 	},
 	
 	/**
@@ -174,14 +243,14 @@ Randomiser.prototype = {
 	 * Thus a group delete request takes a roundtrip from the group
 	 * to here and then on to its dispose fn.
 	 */
-	removeGroup: function(inGroupToDelete) {
+	removeGroup: function (inGroupToDelete) {
 		// first check total number of groups -> 1 is the minimal amount
 		if (this.groups.length > 1) {
 			var groupToDelete = inGroupToDelete;
 			// find the right group and remove
-			this.groups.every(function(it, index) {
+			this.groups.every(function (item, index) {
 				// call dispose method - only returns true if it's ok to delete
-				if (it.groupNumber === groupToDelete && it.dispose()) {
+				if (item.groupNumber === groupToDelete && item.dispose()) {
 					// remove from list; set to NULL
 					this.groups[index] = null;
 				}
@@ -189,6 +258,18 @@ Randomiser.prototype = {
 			}, this);
 			this.groups.clean(); // does away with null or undefined items
 		}
+		this.groupsChanged();
+	},
+	
+	/**
+	 * Should be called anytime the groups array is adjusted (addition and deletions).
+	 * Function makes sure everything is fine (e.g., delete state is properly set)
+	 */
+	groupsChanged: function () {
+		var onlyOneGroup = (this.groups.length === 1) ? true : false;
+		this.groups.forEach(function (item, index) {
+			item.setDeleteButtonState(!onlyOneGroup);
+		});
 	},
 	
 	/**
@@ -233,28 +314,36 @@ Randomiser.prototype = {
 				}
 			}
 			
-			// add n * conditions per group in results
-			for (g = 0; g < numberOfGroups; g++) for (j = 0; j < numberOfSessionsPerGroup; j++) {
-				// add a group's conditions to output (uses a copy to avoid referencing the original array over and over)
-				output.push(conditions[g].slice(0)); // slice returns a copy :)
-				output[output.length-1].shuffle(); // randomise within group
-				output[output.length-1].unshift(g+1); // add ID number of this condition group
+			// add each group n times in results
+			for (k = 0; k < numberOfGroups; k++) {
+				for (j = 0; j < numberOfSessionsPerGroup; j++) {
+					output.push(k);
+				}
 			}
 			// randomise the order between groups (which were added in series)
-			output.shuffle();
+			output.shuffle().balanceOrder();
 			
-			// add participant numbers to the front of each row (has to happen after randomisation procedure)
-			for (i = 0; i < output.length; i++) {
+			// fill the conditions per group
+			for (g = 0; g < output.length; g++) {
+				// add a group's conditions to output (uses a copy to avoid referencing the original array over and over)
+				output[g] = conditions[ output[g] ].slice(0); // slice returns a copy :)
+				output[g].shuffle().balanceOrder(); // randomise within group
+				
+				// add ID number of this condition group
+				output[g].unshift(g+1);
+				
+				// add participant numbers to the front of each row (has to happen after randomisation procedure)
 				var participantNumbers;
 				if (participantsTogether > 1)
-					participantNumbers = (i*participantsTogether+1) + " - " + (i*participantsTogether+participantsTogether);
-				else participantNumbers = (i+1);
-				output[i].unshift(participantNumbers);
+					participantNumbers = (g*participantsTogether+1) + " - " + (g*participantsTogether+participantsTogether);
+				else participantNumbers = (g+1);
+				output[g].unshift(participantNumbers);
 			}
 						
 			// add header at beginning
 			var header = ["Participants","Group"];
-	  		for (c = 0; c < longestConditionLength; c++) header[c+2] = "Condition " + (c+1);
+	  		for (c = 0; c < longestConditionLength; c++)
+				header[c+2] = "Condition " + (c+1);
 	  		output.unshift(header);
 			
 			// generate the table code for display on this page
@@ -293,7 +382,7 @@ Randomiser.prototype = {
 	 */
 	generateHTMLtable: function (myOutput) {
 		// init table and generate code
-		var htmlTable = Element.create('table', {
+		var htmlTable = Element.make('table', {
 				'id': 'output-table',
 				'style': 'text-align: center;'
 			}),
@@ -386,23 +475,24 @@ var GroupController = function (inNumber, inParent) {
 	this.groupNumber = inNumber;
 	this.parentForm = inParent;
 	this.readyForDisposal = false;
-	this.groupWrapper = Element.create('div', {
+	// create elements
+	this.groupWrapper = Element.make('div', {
 		'class': 'group-wrapper'
 	});
-	this.groupInput = Element.create('input', {
+	this.groupInput = Element.make('input', {
 		'id': 'group-'+this.groupNumber,
 		'name': 'group-'+this.groupNumber,
 		'type': 'text',
 		'value': 'lather, rinse, repeat',
 		'class': 'conditionGroup inputSingle minLength:1'
 	});
-	this.groupLabel = Element.create('label', {
+	this.groupLabel = Element.make('label', {
 		'id': 'group-label-'+this.groupNumber,
 		'class': 'cms-label',
 		'for': this.groupInput.id,
 		'innerHTML': 'Conditions within group '+this.groupNumber+' (separate with , comma)'
 	});
-	this.groupDeleteButton = Element.create('button', {
+	this.groupDeleteButton = Element.make('button', {
 		'id': 'group-delete-button-'+this.groupNumber,
 		'class': 'group-delete',
 		'innerHTML': 'Delete group',
@@ -455,7 +545,19 @@ GroupController.prototype = {
 	},
 	
 	/**
-	 * @returns {Array} with the within group conditions
+	 * The 'delete group' button can be disabled, for example when this group is the sole group present.
+	 * 
+	 * @param {Boolean} inState True if button should be enabled, false otherwise
+	 */
+	setDeleteButtonState: function (inState) {
+		if (inState)
+			this.groupDeleteButton.removeAttribute('disabled');
+		else
+			this.groupDeleteButton.setAttribute('disabled', true);
+	},
+	
+	/**
+	 * @returns {Array} with the within-group conditions
 	 */
 	getConditions: function () {
 		var groupConditions = this.groupInput.value;
