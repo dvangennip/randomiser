@@ -20,7 +20,7 @@ Element.make = function (_nodeType, _attributes) { // my own concoction
 	for (key in attr) {
 		if (key === 'innerHTML') el.innerHTML = attr[key];
 		else if (key === 'events' && typeof attr[key] === 'object') {
-			for (skey in attr[key]) {
+			for (skey in attr[key]) { // add all event listeners
 				el.addEventListener(skey, attr[key][skey]);
 			}
 		} else el.setAttribute(key, attr[key]);
@@ -292,7 +292,7 @@ Randomiser.prototype = {
 		this.outputContent.value = '';
 		
 		// first check whether the current form values are valid - if so, continue
-		var formIsValid = this.form.checkValidity() || true; // fn is a recent HTML5 addition, not all browsers support it
+		var formIsValid = (this.form.checkValidity) ? this.form.checkValidity() : true; // fn is a recent HTML5 addition, not all browsers support it
 		if (formIsValid) {
 			// init and get variables
 			var conditions = [],
@@ -386,24 +386,24 @@ Randomiser.prototype = {
 				'id': 'output-table',
 				'style': 'text-align: center;'
 			}),
-			tableCode = '<caption>Random assignment of participants</caption>\n',
 			htmlCode = [];
 		
-		// for each row write out the resulting table row
+		// add a nice caption to the table
+		htmlTable.appendChild( Element.make('caption', {'innerHTML': 'Random assignment of participants'}) );
+		
+		// for each row write out the resulting data
 		for (r = 0; r < myOutput.length; r++) {
-			tableCode = tableCode + '<tr>';
-			// for each cell
+			var row = Element.make('tr');
 			for (d = 0; d < myOutput[r].length; d++) {
-				if (r===0) {
-					tableCode = tableCode + '<th>'+myOutput[r][d]+'</th>';
-				} else {
-					tableCode = tableCode + '<td>'+myOutput[r][d]+'</td>';
+				if (r===0) { // header
+					row.appendChild( Element.make('th', {'innerHTML': myOutput[r][d]}) );
+				} else { // normal row cell
+					row.appendChild( Element.make('td', {'innerHTML': myOutput[r][d]}) );
 				}
 			}
-			tableCode = tableCode + '</tr>\n';
+			htmlTable.appendChild(row);
 		}
-		htmlTable.innerHTML = tableCode;
-		
+				
 		// place html in page - after emptying placeholder element
 		while (this.randomisedOutput.firstChild) this.randomisedOutput.removeChild(this.randomisedOutput.firstChild);
 		this.randomisedOutput.appendChild(htmlTable);
